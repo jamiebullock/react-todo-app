@@ -29,15 +29,14 @@ function App() {
     setItems(newItems);
   }
 
-  const delTodo = (id) => {
-    const newItems = items.filter(item => item.id !== id);
-    setItems(newItems);
+  const deleteItem = (id) => {
+    setItems([...items.filter(item => item.id !== id)]);
   }
 
   return (
     <div className="App">
       <h1>Elenco</h1>
-      <List list={items} markComplete={markComplete} delTodo={delTodo} />
+      <List list={items} markComplete={markComplete} delTodo={deleteItem} />
     </div>
   );
 }
