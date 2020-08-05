@@ -7,42 +7,37 @@ let called = false;
 
 function App() {
   const [items, setItems] = useState([
-      {
-        id: 1,
-        title: 'Take out the trash',
-        completed: false
-      },
-      {
-        id: 2,
-        title: 'Dinner with wife',
-        completed: false
-      },
-      {
-        id: 3,
-        title: 'Write some new code',
-        completed: false
-      }
-    ]);
-
-    const markComplete = (id, e) => {
-      // let newItems = [...items];
-      // let itemWithID = newItems.find(item => item.id === id);
-      // itemWithID.completed = true;
-      
-      const newItems = items.map(item => item.id === id ? { ...item, completed: !item.completed } : item );
-      //console.log(newItems);
-      console.log("CALLED");
-      console.log(e);
-      
-      setItems(newItems);
+    {
+      id: 1,
+      title: 'Take out the trash',
+      completed: false
+    },
+    {
+      id: 2,
+      title: 'Dinner with wife',
+      completed: false
+    },
+    {
+      id: 3,
+      title: 'Write some new code',
+      completed: false
     }
-  
+  ]);
 
- 
+  const markComplete = (id, e) => {
+    const newItems = items.map(item => item.id === id ? { ...item, completed: !item.completed } : item);
+    setItems(newItems);
+  }
+
+  const delTodo = (id) => {
+    const newItems = items.filter(item => item.id !== id);
+    setItems(newItems);
+  }
+
   return (
     <div className="App">
       <h1>Elenco</h1>
-      <List list={items} markComplete={markComplete}/>
+      <List list={items} markComplete={markComplete} delTodo={delTodo} />
     </div>
   );
 }
