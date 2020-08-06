@@ -4,7 +4,7 @@ export default function About() {
     return (
         <React.Fragment>
             <h1>About</h1>
-            <p>This is Elenco</p>
+            <p>Some info about this app</p>
         </React.Fragment>
     )
 }
