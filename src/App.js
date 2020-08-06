@@ -1,69 +1,82 @@
-import React, { useState } from "react";
-import List from "./components/List";
-import Header from "./components/layout/header";
-import AddItem from "./components/AddItem";
+import React, { useState, useEffect } from 'react';
 
-import "./App.css";
-let called = false;
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
+import List from './components/List';
+import Header from './components/layout/header';
+import AddItem from './components/AddItem';
+import About from './components/pages/About';
+
+import './App.css';
+import axios from 'axios';
 let idCounter = 0;
+const axiosURL = 'http://jsonplaceholder.typicode.com/todos';
 
-function getID()
-{
+function getID() {
+  console.log(idCounter);
+
   return idCounter++;
 }
 
-
 function App() {
   const [items, setItems] = useState([
-    {
-      id: getID(),
-      title: "Take out the trash",
-      completed: false,
-    },
-    {
-      id: getID(),
-      title: "Dinner with wife",
-      completed: false,
-    },
-    {
-      id: getID(),
-      title: "Write some new code",
-      completed: false,
-    },
   ]);
+
+  useEffect( () => {
+    console.log("Calling effect");
+    
+    axios.get(axiosURL+'?_limit=10')
+    .then(res => setItems(res.data))
+  }, []);   // [] added to prevent useEffect being called every render, see: https://www.andreasreiterer.at/react-useeffect-hook-loop/
 
   const markComplete = (id, e) => {
     const newItems = items.map((item) =>
-      item.id === id ? { ...item, completed: !item.completed } : item
+      item.id === id ? { ...item, completed: !item.completed } : item,
     );
     setItems(newItems);
   };
 
   const deleteItem = (id) => {
-    setItems([...items.filter((item) => item.id !== id)]);
+    axios.delete(`http://jsonplaceholder.typicode.com/todos/${id}`)
+    .then(res  =>setItems([...items.filter((item) => item.id !== id)]))
+    ;
   };
 
   const addItem = (title) => {
-    const newItem = {
-      id: getID(),
+    console.log("Adding Item");
+    
+    axios.post(axiosURL, {
       title,
       completed: false
-    };
-    setItems([...items, newItem]);
+    })
+    .then(res => {
+      setItems([...items, res.data]);
+    });
+    
   };
 
   return (
-    <div className="App">
-      <div className="container">
-        <Header />
-        <AddItem addItem={addItem} />
-        <List
-          list={items}
-          markComplete={markComplete}
-          delTodo={deleteItem}
-        />{" "}
+    <Router>
+      <div className='App'>
+        <div className='container'>
+          <Header />
+          <Route
+            exact path='/'
+            render={(props) => (
+              <React.Fragment>
+                <AddItem addItem={addItem} />
+                <List
+                  list={items}
+                  markComplete={markComplete}
+                  delTodo={deleteItem}
+                />
+              </React.Fragment>
+            )}
+          />
+          <Route path="/about" component={About} />
+        </div>
       </div>
-    </div>
+    </Router>
   );
 }
 

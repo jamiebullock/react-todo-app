@@ -14,7 +14,9 @@ function List(props) {
 
 // PropTypes
 List.propTypes = {
-  list: PropTypes.array.isRequired
+  list: PropTypes.array.isRequired,
+  markComplete: PropTypes.func.isRequired,
+  delTodo: PropTypes.func.isRequired
 }
 
 export default List;

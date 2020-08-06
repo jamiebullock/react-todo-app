@@ -31,6 +31,8 @@ function AddItem(props) {
   );
 }
 
-AddItem.propTypes = {};
+AddItem.propTypes = {
+  addTodo: PropTypes.func.isRequired
+};
 
 export default AddItem;
